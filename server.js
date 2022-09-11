@@ -1,8 +1,4 @@
 const express = require('express');
-const { Category } = require('./models');
-const { Product } = require('./models');
-const ProductController = require('./controllers/ProductsController');
-const CategoriesController = require('./controllers/CategoriesController');
 const router = require('./routes');
 
 const app = express();

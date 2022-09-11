@@ -2,20 +2,14 @@ const express = require('express');
 const { Category } = require('./models');
 const { Product } = require('./models');
 const ProductController = require('./controllers/ProductsController');
+const CategoriesController = require('./controllers/CategoriesController');
 
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-const createCategory = (req, res) => {
-  console.log(req.body);
-  Category.create(req.body)
-    .then((response) => res.json(response))
-    .catch((err) => res.json(err));
-};
-
-app.post('/category', createCategory);
+app.post('/category', CategoriesController.create);
 app.post('/product', ProductController.create);
 app.get('/product', ProductController.getAll);
 app.get('/product/:id', ProductController.getOne);

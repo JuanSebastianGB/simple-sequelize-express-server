@@ -4,6 +4,8 @@ import redisClient from '../utils/redis';
 
 const { User } = require('../models');
 
+const error = 'Unauthorized';
+
 /**
  * Decode a base64 encoded string into a utf-8 string.
  * @param string - The string to be decoded.
@@ -35,13 +37,13 @@ class AuthController {
    */
   static async getConnect(req, res) {
     const incomingHeader = req.header('Authorization');
-    if (!incomingHeader) return res.status(401).json({ error: 'Unauthorized' });
+    if (!incomingHeader) return res.status(401).json({ error });
 
     const splitData = incomingHeader.substring(6);
     const buff = decodeString(splitData);
     const [email, password] = buff.split(':');
     if (!email || !password) {
-      return res.status(401).json({ error: 'Unauthorized' });
+      return res.status(401).json({ error });
     }
     const hashedPassword = hashPasswd(password);
     const userToFind = { email, password: hashedPassword };
@@ -52,7 +54,19 @@ class AuthController {
     const token = `auth_${key}`;
     const { id } = userFound[0];
     await redisClient.set(token, id, 86400);
-    return res.json({ token });
+    return res.json({ token: key });
+  }
+
+  static async getDisconnect(req, res) {
+    const key = req.header('X-Token');
+    if (!key || key.length === 0) {
+      return res.status(401).json({ error });
+    }
+    if (await redisClient.get(`auth_${key}`)) {
+      await redisClient.del(`auth_${key}`);
+      return res.status(204).end();
+    }
+    return res.status(401).json({ error });
   }
 }
 

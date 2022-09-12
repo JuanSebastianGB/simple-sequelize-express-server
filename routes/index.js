@@ -10,6 +10,7 @@ const ProductsController = require('../controllers/ProductsController');
 const router = express.Router();
 
 router.get('/connect', AuthController.getConnect);
+router.get('/disconnect', AuthController.getDisconnect);
 
 router.get('/random', AppController.randomNumber);
 router.get('/status', AppController.getStatus);

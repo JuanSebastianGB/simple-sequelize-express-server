@@ -17,6 +17,7 @@ router.get('/status', AppController.getStatus);
 router.post('/users', UsersController.postNew);
 
 router.post('/category', CategoriesController.create);
+router.get('/category', CategoriesController.getAll);
 
 router.post('/product', ProductsController.create);
 router.get('/product', ProductsController.getAll);

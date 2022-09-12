@@ -2,6 +2,11 @@ import crypto from 'crypto';
 
 const { User } = require('../models');
 
+/**
+ * It takes a string, hashes it, and returns the hash
+ * @param pwd - The password to be hashed.
+ * @returns The hashed password.
+ */
 const hashPasswd = (pwd) => {
   const hash = crypto.createHash('sha1');
   const data = hash.update(pwd, 'utf-8');
